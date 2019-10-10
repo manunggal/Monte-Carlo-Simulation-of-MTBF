@@ -4,10 +4,8 @@ library(shiny)
 library(shinydashboard) 
 
 # UI
-# header = (dashboardHeader(title = "Monte Carlo Simulation of MTBF",
-#                           titleWidth = 300))
-header = dashboardHeader(title = span("Monte Carlo Simulation of MTBF",
-                                      style = "font-size: 18px"),
+
+header = dashboardHeader(title = "Monte Carlo Simulation of MTBF",
                          titleWidth = 300)
 
 sidebar = dashboardSidebar(
@@ -28,6 +26,11 @@ sidebar = dashboardSidebar(
 )
 
 body = dashboardBody(
+  tags$head(tags$style(HTML('
+      .main-header .logo {
+        font-size: 18px;
+      }
+    '))),
   fluidRow(
     column(width = 6,
            box(
