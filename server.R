@@ -78,6 +78,7 @@ server = function(input, output) {
       sumr[1L,] = c(reptime, failnum, tottime) # summary of reparation time, failure number, and total operating time
       # repsum[i,] = c(fc_afrep_id, fcid_afrepline1, fcid_afrepline2, fcid_afrepline3, fcid_afrepline4) # summary of components contributing to system failure
       print(res)
+      
       if (tottime+x >= tail(mission_time_vec(), n=1)) break
       i=i+1L
     }
@@ -87,7 +88,16 @@ server = function(input, output) {
   
   # collect simulation result
   av_sys = eventReactive(input$simulate, {
-    av_sys = map(ttf_turbine(), avsys)
+    withProgress(message = 'Simulation in progress',
+                 detail = 'Patience is a virtue...', value = 0, {
+                   for (i in 1:10) {
+                     incProgress(1/10)
+                     av_sys = map(ttf_turbine(), avsys)
+                   }
+                 })
+    
+    av_sys 
+    
   })
   
   sum_av_sys = eventReactive(input$simulate, {
