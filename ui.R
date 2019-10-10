@@ -24,7 +24,7 @@ sidebar = dashboardSidebar(
                style="color: #fff; background-color: #A52A2A; border-color: #A52A2A"),
   br(), # linebreak
   menuItem("Source code for The App", icon = icon("file-code-o"), 
-           href = "https://github.com/manunggal/Deceptive-MTBF")
+           href = "https://github.com/manunggal/Monte-Carlo-Simulation-of-MTBF")
 )
 
 body = dashboardBody(
