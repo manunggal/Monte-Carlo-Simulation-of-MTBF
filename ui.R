@@ -21,7 +21,7 @@ sidebar = dashboardSidebar(
   actionButton("simulate", "Start Simulation", icon("paper-plane"), 
                style="color: #fff; background-color: #A52A2A; border-color: #A52A2A"),
   br(), # linebreak
-  menuItem("Source code for The App", icon = icon("file-code-o"), 
+  menuItem("Source code for the App", icon = icon("file-code-o"), 
            href = "https://github.com/manunggal/Monte-Carlo-Simulation-of-MTBF")
 )
 
