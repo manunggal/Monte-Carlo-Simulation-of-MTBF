@@ -37,8 +37,8 @@ body = dashboardBody(
              title = "About the simulation", width = NULL, solidHeader = TRUE, status = "primary",
              p("The purpose of this Monte Carlo simulation is to illustrate the relation between MTBF, mission duration, and their impact to the possible numbers of failures.
                For simplicity, constant failure rate is assumed for the input, hence failure rate equals to 1/MTBF. After each reparation, component is assumed to be as good as new."),
-             p("You can play around with MTBF, MTTR, and mission time duration in order to see how they drives the reliability and numbers of probable failures.
-               The simulation number will impact on how good the simulation approximate the expected value. More simulation numbers will converge the result to expected value.
+             p("You can change the MTBF, MTTR, and mission time duration in order to see how they drives the reliability and numbers of probable failures.
+               The simulation numbers will affect how good the simulation approximate the expected value. More simulation numbers will converge the result to expected value.
                Simulation numbers is limited to 100.000 iteration."),
              p("The deterministic reliability is the estimated reliability from equation R = exp(-lambda x mission_time), whereas the simulated reliability is the result of the Monte Carlo simulation."))),
     column(width = 3,
