@@ -63,18 +63,18 @@ server = function(input, output) {
       
     {
       # time to failure after rerun after reparation
-      fc_afrep = (-1/(1/tail(mission_time_vec(), n=1)))*log(1-(c(runif(length(input$mission_time)))))
+      fc_afrep = (-1/(1/input$mtbf))*log(1-(c(runif(length(input$mission_time)))))
       
       # reparation duration
       rep = input$mttr/(24*365)
-             
+      
       # result
       cumt = (rep+fc_afrep) # cumulative time after reparation and follow up random simulation
       res[i,] = c(rep, fc_afrep, cumt) # summary of reparation, id of other failure, ttf of other failure, cumulative time)
       tottime = sum(res$cumt) # cummulative operation time to be compared with mission time
       reptime = sum(res$rep) # total reparation time
       failnum = length(res$rep) # total reparation numbers
-           
+      
       sumr[1L,] = c(reptime, failnum, tottime) # summary of reparation time, failure number, and total operating time
       # repsum[i,] = c(fc_afrep_id, fcid_afrepline1, fcid_afrepline2, fcid_afrepline3, fcid_afrepline4) # summary of components contributing to system failure
       print(res)
@@ -174,7 +174,7 @@ server = function(input, output) {
   })
   
   output$plot_maintenance = renderPlotly({
-    plot_ly(x = as.factor(names(sum_rep_no_sys())),
+    plot_ly(x = as.integer(names(sum_rep_no_sys())),
             y = (round(100*sum_rep_no_sys()/sum(sum_rep_no_sys()), 1)),
             name = paste("Failure Numbers Probability for", input$mission_time, "year(s)") , type = "bar") %>%
       layout(xaxis = list(title = "Number of Failures", dtick = 1),
