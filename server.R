@@ -1,4 +1,4 @@
-# Load Relevant Library
+# Load Library
 #------------
 library(dplyr)
 library(purrr)
@@ -19,24 +19,27 @@ server = function(input, output) {
   
   set.seed(8)
   # initial condition
+  # vector of time (year)
   mission_time_vec = eventReactive(input$simulate, {
     c(1:round(input$mission_time, digits = 0))
   })
   
+  # event reactive object of mttr
   maintenance_duration = eventReactive(input$simulate, {
     input$mttr
   })
   
+  # reliability based on equation r = exp(-failure_rate*misison_time)
   r_sys_det = eventReactive(input$simulate, {
     round(exp(-1*(1/input$mtbf)*mission_time_vec())*100, digits = 2)
   })
   
+  # time to failure using monte carlo
   ttf_turbine = eventReactive(input$simulate, {
     (-1/(1/input$mtbf))*log(1-(cbind(runif(input$sim_number))))
   })
   
-  # ttf_turbine = (-1/(1/input$mtbf))*log(1-(cbind(runif(input$sim_number))))
-  
+  # simulated reliability
   r_sys_sim = reactive({
     r_sys_sim_data = 0
     for (i in 1:tail(mission_time_vec(), n=1)){
@@ -64,17 +67,14 @@ server = function(input, output) {
       
       # reparation duration
       rep = input$mttr/(24*365)
-      
-      
-      
+             
       # result
       cumt = (rep+fc_afrep) # cumulative time after reparation and follow up random simulation
       res[i,] = c(rep, fc_afrep, cumt) # summary of reparation, id of other failure, ttf of other failure, cumulative time)
       tottime = sum(res$cumt) # cummulative operation time to be compared with mission time
       reptime = sum(res$rep) # total reparation time
       failnum = length(res$rep) # total reparation numbers
-      
-      
+           
       sumr[1L,] = c(reptime, failnum, tottime) # summary of reparation time, failure number, and total operating time
       # repsum[i,] = c(fc_afrep_id, fcid_afrepline1, fcid_afrepline2, fcid_afrepline3, fcid_afrepline4) # summary of components contributing to system failure
       print(res)
@@ -85,6 +85,7 @@ server = function(input, output) {
     }
     return(list(res,sumr))
   }
+  
   
   # collect simulation result
   av_sys = eventReactive(input$simulate, {
@@ -109,6 +110,7 @@ server = function(input, output) {
     melt(lapply(sum_av_sys()[1:input$sim_number, 1], function(x) ((tail(mission_time_vec(), n=1)-x)/tail(mission_time_vec(), n=1)))) #calculate availability for each iteration
   })
   
+         
   # calculate percentage of system sucess without failure
   rep_no_sys = eventReactive(input$simulate, {
     melt(sum_av_sys()[1:input$sim_number,2]) #number of failure for each iterations
@@ -117,8 +119,8 @@ server = function(input, output) {
   sum_rep_no_sys = eventReactive(input$simulate, {
     (table(rep_no_sys()[,1])) # distribution of failure numbers and without failures
   }) 
-  
-  
+   
+         
   # comparison of number of failure (distribution of failure number for n simulation)
   mean_rep_no_sys = eventReactive(input$simulate, {
     mean(rep_no_sys()[,1])  # mean  number of failure during n iteration
@@ -128,7 +130,7 @@ server = function(input, output) {
     sd(rep_no_sys()[,1]) # standard deviation
   }) 
   
-  
+         
   # Display Main Variables
   output$failure_rate = renderValueBox({
     valueBox(
